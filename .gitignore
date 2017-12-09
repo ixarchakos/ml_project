@@ -105,3 +105,5 @@ test/
 Test/
 TEST/
 
+# local config
+.idea/
