@@ -108,3 +108,7 @@ Tests/
 
 # local config
 .idea/
+
+
+# data
+data/
