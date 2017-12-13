@@ -112,3 +112,6 @@ Tests/
 
 # data
 data/
+
+# exclude graph
+graphs/
