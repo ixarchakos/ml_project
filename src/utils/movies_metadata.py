@@ -9,15 +9,18 @@ def load_cast_crew():
     for row in movies:
         id = str(row[2])
         if id in movies_data:
-            movies_actors, movies_crew = list(), list()
+            movies_actors, movies_crew = list(), dict()
             for actor in eval(row[0]):
                 movies_actors.append(str(actor["id"]))
             for crew in eval(row[1]):
                 if 'Producer' == crew['job'] or 'Director' == crew['job'] or 'Writing' == crew['department']:
+                    movies_crew[str(crew["id"])] = list()
+            for crew in eval(row[1]):
+                if 'Producer' == crew['job'] or 'Director' == crew['job'] or 'Writing' == crew['department']:
                     if 'Writing' == crew['department']:
-                        movies_crew.append({str(crew["id"]): "Writer"})
+                        movies_crew[str(crew["id"])].append("Writer")
                     else:
-                        movies_crew.append({str(crew["id"]): crew["job"]})
+                        movies_crew[str(crew["id"])].append(crew["job"])
             movies_data[id]["actors"] = movies_actors
             movies_data[id]["crew"] = movies_crew
 
@@ -89,6 +92,8 @@ actors, crew = load_people()
 movies = load_cast_crew()
 
 folder = "../../dicts/"
+print movies
+
 
 pickle.dump(actors, open(folder + "actors.p", 'wb'))
 pickle.dump(crew, open(folder + "crew.p", 'wb'))
