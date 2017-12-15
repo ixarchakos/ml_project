@@ -81,7 +81,7 @@ class Normal_Features:
                 count_c += 1
             if count_c > 0:
                 movies_tenure_crew[m_id] = sum_c / count_c
-        return movies_tenure_actor, movies_tenure_crew[str(8358)]
+        return movies_tenure_actor, movies_tenure_crew
 
 
     #*************************************************************************************
