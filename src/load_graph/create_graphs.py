@@ -29,9 +29,11 @@ def sort_by_hand(value):
 
 def create_graphml_file(data, year, previous):
     if previous == 0:
-        folder = "../../graphs/year_by_year/crew/"
+        #folder = "../../graphs/year_by_year/crew/"
+        folder = "../../graphs/year_by_year/actors/"
     else:
-        folder = "../../graphs/cumulative/crew/"
+        #folder = "../../graphs/cumulative/crew/"
+        folder = "../../graphs/cumulative/actors/"
     fileName = folder + str(year) + '.graphml'
     file = open(fileName , 'w')
     file.write('<?xml version=\"1.0\" encoding=\"UTF-8\"?> ' +
@@ -86,11 +88,14 @@ def create_movie_graph(year , previous):
 
     for m_id in movies_id:
         temp_list = list()
-        for actor in ast.literal_eval(actors_dict[m_id]["crew"]):
-            if 'Producer' == actor['job'] or 'Director' == actor['job'] or 'Writing' == actor['department']:
-                temp_list.append(actor["id"])
-                staff_info[actor["id"]] = actor["name"]
+        # for actor in ast.literal_eval(actors_dict[m_id]["crew"]):
+        #     if 'Producer' == actor['job'] or 'Director' == actor['job'] or 'Writing' == actor['department']:
+        #         temp_list.append(actor["id"])
+        #         staff_info[actor["id"]] = actor["name"]
 
+        for actor in eval(actors_dict[m_id]['cast']):
+            temp_list.append(actor['id'])
+            staff_info[actor["id"]] = actor["name"]
         pairs = all_to_all(temp_list)
         for v in pairs:
             network_pairs.append(v)
@@ -109,7 +114,7 @@ def create_movie_graph(year , previous):
 
 def create_one_year_dataset():
     for year in range(1995, 2016):
-        fileName = create_movie_graph(year, 1)
+        fileName = create_movie_graph(year, 0)
         g = load_graph(fileName)
         pickle.dump(g, open(fileName.replace(".graphml", "") + '.p', 'wb'))
 
