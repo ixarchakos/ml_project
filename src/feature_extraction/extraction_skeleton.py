@@ -19,7 +19,8 @@ class Feature_Extraction:
     def feature_extraction(self):
         for year in range(1995, 2016):
             self.movies_per_year(year)
-        print len(self.feature_matrix[2])
+        print len(self.feature_matrix[11])
+        print len(self.feature_matrix)
         print self.count
 
 
@@ -66,9 +67,58 @@ class Feature_Extraction:
         self.add_to_feature_matrix(feature_dict, year, 7)
         self.feature_names[7] = 'previous till crew revenue'
 
-        
 
+        feature_dict = self.nf.avg_previous_team_individual_experience(year, 'exact')[0]
+        self.add_to_feature_matrix(feature_dict, year, 8)
+        self.feature_names[8] = 'previous exact cast individual experience'
 
+        feature_dict = self.nf.avg_previous_team_individual_experience(year, 'exact')[1]
+        self.add_to_feature_matrix(feature_dict, year, 9)
+        self.feature_names[9] = 'previous exact crew individual experience'
+
+        feature_dict = self.nf.avg_previous_team_individual_experience(year, 'till')[0]
+        self.add_to_feature_matrix(feature_dict, year, 10)
+        self.feature_names[10] = 'previous till cast individual experience'
+
+        feature_dict = self.nf.avg_previous_team_individual_experience(year, 'till')[1]
+        self.add_to_feature_matrix(feature_dict, year, 11)
+        self.feature_names[11] = 'previous till crew individual experience'
+
+        feature_dict = self.nf.team_size(year)[0]
+        self.add_to_feature_matrix(feature_dict, year, 12)
+        self.feature_names[12] = 'cast size'
+
+        feature_dict = self.nf.team_size(year)[1]
+        self.add_to_feature_matrix(feature_dict, year, 13)
+        self.feature_names[13] = 'crew size'
+
+        feature_dict = self.nf.team_tenure(year, 'exact')[0]
+        self.add_to_feature_matrix(feature_dict, year, 14)
+        self.feature_names[14] = 'cast exact tenure'
+
+        feature_dict = self.nf.team_size(year,  'exact')[1]
+        self.add_to_feature_matrix(feature_dict, year, 15)
+        self.feature_names[15] = 'crew exact tenure'
+
+        feature_dict = self.nf.team_tenure(year, 'till')[0]
+        self.add_to_feature_matrix(feature_dict, year, 16)
+        self.feature_names[16] = 'cast tenure till'
+
+        feature_dict = self.nf.team_size(year, 'till')[1]
+        self.add_to_feature_matrix(feature_dict, year, 17)
+        self.feature_names[17] = 'crew tenure till'
+
+        feature_dict = self.nf.average_team_combined_stats(year, 'experience')
+        self.add_to_feature_matrix(feature_dict, year, 18)
+        self.feature_names[18] = 'dyads previous experience'
+
+        feature_dict = self.nf.average_team_combined_stats(year, 'rating')
+        self.add_to_feature_matrix(feature_dict, year, 19)
+        self.feature_names[19] = 'dyads previous rating'
+
+        feature_dict = self.nf.average_team_combined_stats(year, 'revenue')
+        self.add_to_feature_matrix(feature_dict, year, 20)
+        self.feature_names[20] = 'dyads previous revenue'
 
 
 
@@ -96,6 +146,6 @@ class Feature_Extraction:
 
 
 k = Feature_Extraction()
-print k.feature_extraction()
+k.feature_extraction()
 print len(k.create_target_vector())
 

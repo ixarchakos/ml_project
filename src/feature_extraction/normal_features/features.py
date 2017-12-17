@@ -1,4 +1,5 @@
 from src.feature_extraction.utils import Feature
+from collections import defaultdict
 
 
 class Normal_Features:
@@ -75,13 +76,15 @@ class Normal_Features:
             sum_c = 0.0
             count_c = 0.0
             for actors_id in self.f.movies[m_id]["actors"]:
-                sum_a += actors_tenure[int(actors_id)]
+                if actors_id in actors_tenure:
+                    sum_a += actors_tenure[int(actors_id)]
                 count_a += 1
             if count_a > 0:
                 movies_tenure_actor[m_id] = sum_a/count_a
 
             for crew_id in self.f.movies[m_id]["crew"]:
-                sum_c += crew_tenure[int(crew_id)]
+                if crew_id in crew_tenure:
+                    sum_c += crew_tenure[int(crew_id)]
                 count_c += 1
             if count_c > 0:
                 movies_tenure_crew[m_id] = sum_c / count_c
@@ -100,14 +103,15 @@ class Normal_Features:
                 count = 0.0
                 for pair in possible_pairs:
                     if pair in pair_values:
-                        print pair_values[pair][0]
                         total += pair_values[pair][0]
                     count += 1
                 if count > 0:
                     movies_team_average_stats[key] = float(total) / float(count)
                 else:
                     movies_team_average_stats[key] = 0
-        print movies_team_average_stats
+        return movies_team_average_stats
+
+
     #*************************************************************************************
     def actors_aggregate_value(self, year, feature_type="exact", cast_crew="actors", value="revenue"):
         actors_income = dict()
@@ -196,7 +200,6 @@ class Normal_Features:
     def pairs_features(self, year, value="revenue"):
         movies_ids = self.f.load_desired_movies(year, "till")
         movies = self.f.movies
-        from collections import defaultdict
 
         pair_experience = defaultdict(list)
         for key, movie in movies.iteritems():
