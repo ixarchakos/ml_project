@@ -25,7 +25,7 @@ class Normal_Features:
             for crew_id in self.f.movies[m_id]["crew"].keys():
                 if crew_id in c_income:
                     sum_c_values += c_income[crew_id]
-                count_c +=1
+                count_c += 1
             if count_c > 0:
                 movies_team_value_crew[m_id] = sum_c_values / count_c
             if count_a > 0:
@@ -67,7 +67,7 @@ class Normal_Features:
 
     def team_tenure(self, year, feature_type="exact"):
         movies_ids = self.f.load_desired_movies(year, "till")
-        actors_tenure, crew_tenure = self.people_tenure(year)
+        actors_tenure, crew_tenure = self.people_tenure(year-1)
         movies_tenure_actor, movies_tenure_crew = dict(), dict()
         for m_id in movies_ids:
             sum_a = 0.0
@@ -221,7 +221,7 @@ class Normal_Features:
                     pair_experience[k] = [sum(v)]
 
         return pair_experience
-    
+
     def all_to_all(self, l):
         result = [(l[p1], l[p2]) for p1 in range(len(l)) for p2 in range(p1 + 1, len(l))]
         result = [self.sort_by_hand(i) for i in list(set(result)) if i[0] != i[1]]
@@ -233,5 +233,5 @@ class Normal_Features:
         else:
             return value[0], value[1]
 
-k = Normal_Features()
-print k.average_team_combined_stats(2010, value="rating")
+# k = Normal_Features()
+# print k.average_team_combined_stats(2010, value="rating")
