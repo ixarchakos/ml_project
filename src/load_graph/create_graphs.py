@@ -114,7 +114,7 @@ def create_movie_graph(year , previous):
 
 def create_one_year_dataset():
     for year in range(1995, 2016):
-        fileName = create_movie_graph(year, 0)
+        fileName = create_movie_graph(year, 1)
         g = load_graph(fileName)
         pickle.dump(g, open(fileName.replace(".graphml", "") + '.p', 'wb'))
 
