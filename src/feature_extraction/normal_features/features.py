@@ -30,7 +30,7 @@ class Normal_Features:
                 movies_team_value_crew[m_id] = sum_c_values / count_c
             if count_a > 0:
                 movies_team_value_actors[m_id] = sum_a_values/count_a
-        return movies_team_value_actors, movies_team_value_actors
+        return movies_team_value_actors, movies_team_value_crew
 
     def avg_previous_team_individual_experience(self, year=1990, feature_type="exact"):
         movies_ids = self.f.load_desired_movies(year, feature_type)
