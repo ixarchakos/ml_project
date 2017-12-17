@@ -18,7 +18,7 @@ class Feature_Extraction:
     def feature_extraction(self):
         for year in range(1995, 2016):
             self.movies_per_year(year)
-        print len(self.feature_matrix[1])
+        print len(self.feature_matrix[0])
 
     def sort_by_year(self):
         temp = dict()
@@ -31,19 +31,20 @@ class Feature_Extraction:
         return sorted_dict
 
     def movies_per_year(self, year):
-        feature_dict = self.nf.avg_team_aggregate_value(year, 'exact', "rating")[0]
-        self.add_to_feature_matrix(feature_dict , year , 0)
-        self.feature_names[0] = 'previous exact cast rating'
-        feature_dict = self.nf.avg_team_aggregate_value(year, 'exact', "rating")[1]
-        self.add_to_feature_matrix(feature_dict,year,1)
-        self.feature_names[1] = 'previous exact crew rating'
-
+        try:
+            feature_dict = self.nf.avg_team_aggregate_value(year, 'exact', "rating")[0]
+            self.add_to_feature_matrix(feature_dict , year , 0)
+            self.feature_names[0] = 'previous exact cast rating'
+            feature_dict = self.nf.avg_team_aggregate_value(year, 'exact', "rating")[1]
+            self.add_to_feature_matrix(feature_dict,year,1)
+            self.feature_names[1] = 'previous exact crew rating'
+        except Exception as e:
+            print year
 
     def add_to_feature_matrix(self, feature_dict, year , index):
         feature = []
         for key, y in self.sorted_movies.iteritems():
             if y == year:
-                
                 feature.append(feature_dict[key])
         if year == 1995:
             self.feature_matrix.append(feature)
