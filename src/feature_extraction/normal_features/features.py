@@ -8,21 +8,23 @@ class Normal_Features:
 
     def avg_team_aggregate_value(self, year=1990, feature_type="exact", value="revenue"):
 
-        movies_ids = self.f.load_desired_movies(year, feature_type)
         movies_team_value_actors = dict()
         movies_team_value_crew = dict()
-        a_income = self.actors_aggregate_value(year, feature_type=feature_type, cast_crew="actors", value=value)
-        c_income = self.actors_aggregate_value(year, feature_type=feature_type, cast_crew="crew", value=value)
-        for m_id in movies_ids:
+        current_movie_ids = self.f.load_desired_movies(year, "exact")
+        a_income = self.actors_aggregate_value(year-1, feature_type=feature_type, cast_crew="actors", value=value)
+        c_income = self.actors_aggregate_value(year-1, feature_type=feature_type, cast_crew="crew", value=value)
+        for m_id in current_movie_ids:
             sum_a_values = 0.0
             sum_c_values = 0.0
             count_a = 0
             count_c = 0
             for actor_id in self.f.movies[m_id]["actors"]:
-                sum_a_values += a_income[actor_id]
+                if actor_id in a_income:
+                    sum_a_values += a_income[actor_id]
                 count_a += 1
             for crew_id in self.f.movies[m_id]["crew"].keys():
-                sum_c_values += c_income[crew_id]
+                if crew_id in c_income:
+                    sum_c_values += c_income[crew_id]
                 count_c +=1
             if count_c > 0:
                 movies_team_value_crew[m_id] = sum_c_values / count_c
@@ -34,18 +36,20 @@ class Normal_Features:
         movies_ids = self.f.load_desired_movies(year, feature_type)
         actors_experience = dict()
         crew_experience = dict()
-        a_experience = self.actors_individual_experience(year, feature_type, cast_crew="actors")
-        c_experience = self.actors_individual_experience(year, feature_type, cast_crew="crew")
+        a_experience = self.actors_individual_experience(year-1, feature_type, cast_crew="actors")
+        c_experience = self.actors_individual_experience(year-1, feature_type, cast_crew="crew")
         for m_id in movies_ids:
             sum_a_values = 0.0
             sum_c_values = 0.0
             count_a = 0
             count_c = 0
             for actor_id in self.f.movies[m_id]["actors"]:
-                sum_a_values += a_experience[actor_id]
+                if actor_id in a_experience:
+                    sum_a_values += a_experience[actor_id]
                 count_a += 1
             for crew_id in self.f.movies[m_id]["crew"].keys():
-                sum_c_values += c_experience[crew_id]
+                if crew_id in c_experience:
+                    sum_c_values += c_experience[crew_id]
                 count_c += 1
             if count_c > 0:
                 crew_experience[m_id] = sum_c_values / count_c
@@ -83,7 +87,27 @@ class Normal_Features:
                 movies_tenure_crew[m_id] = sum_c / count_c
         return movies_tenure_actor, movies_tenure_crew
 
-
+    def average_team_combined_stats(self, year, value="experience"):
+        movies_ids = self.f.load_desired_movies(year, "exact")
+        movies = self.f.movies
+        pair_values = self.pairs_features(year-1, value)
+        movies_team_average_stats = dict()
+        for key, movie in movies.iteritems():
+            if key in movies_ids:
+                actors_crew = movies[key]["actors"] + movies[key]["crew"].keys()
+                possible_pairs = self.all_to_all(list(set(actors_crew)))
+                total = 0.0
+                count = 0.0
+                for pair in possible_pairs:
+                    if pair in pair_values:
+                        print pair_values[pair][0]
+                        total += pair_values[pair][0]
+                    count += 1
+                if count > 0:
+                    movies_team_average_stats[key] = float(total) / float(count)
+                else:
+                    movies_team_average_stats[key] = 0
+        print movies_team_average_stats
     #*************************************************************************************
     def actors_aggregate_value(self, year, feature_type="exact", cast_crew="actors", value="revenue"):
         actors_income = dict()
@@ -133,7 +157,7 @@ class Normal_Features:
         return actors_movie_count
 
     def people_tenure(self, year):
-        movies_ids = self.f.load_desired_movies(year , 'till')
+        movies_ids = self.f.load_desired_movies(year, 'till')
         movies = self.f.movies
         actors_ids = self.f.actors
         crew = self.f.crew
@@ -169,8 +193,45 @@ class Normal_Features:
 
         return actor_tenure, crew_tenure
 
+    def pairs_features(self, year, value="revenue"):
+        movies_ids = self.f.load_desired_movies(year, "till")
+        movies = self.f.movies
+        from collections import defaultdict
 
+        pair_experience = defaultdict(list)
+        for key, movie in movies.iteritems():
+            if key in movies_ids:
+                actors_crew = movie["actors"] + movie["crew"].keys()
+                dyads = self.all_to_all(list(set(actors_crew)))
+                dyads_to_dict = dict()
+                if value == "experience":
+                    for v in dyads:
+                        dyads_to_dict[v] = 1
+                elif value == "revenue":
+                    for v in dyads:
+                        dyads_to_dict[v] = movie["revenue"]
+                elif value == "rating":
+                    for v in dyads:
+                        dyads_to_dict[v] = movie["rating"]
+                for k, v in dyads_to_dict.iteritems():
+                    pair_experience[k].append(v)
+        for k, v in pair_experience.iteritems():
+            if type(v) is list:
+                if len(v) > 1:
+                    pair_experience[k] = [sum(v)]
 
+        return pair_experience
+    
+    def all_to_all(self, l):
+        result = [(l[p1], l[p2]) for p1 in range(len(l)) for p2 in range(p1 + 1, len(l))]
+        result = [self.sort_by_hand(i) for i in list(set(result)) if i[0] != i[1]]
+        return result
+
+    def sort_by_hand(self, value):
+        if value[0] > value[1]:
+            return value[1], value[0]
+        else:
+            return value[0], value[1]
 
 k = Normal_Features()
-print k.team_tenure(2015)
+print k.average_team_combined_stats(2010, value="rating")
