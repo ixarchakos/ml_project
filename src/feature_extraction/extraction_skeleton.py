@@ -353,6 +353,9 @@ class Feature_Extraction:
 
 
 k = Feature_Extraction()
-k.feature_extraction()
-print len(k.create_target_vector())
-
+#k.feature_extraction()
+#print len(k.create_target_vector())
+y = k.create_target_vector()
+pickle.dump(y, open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'wb'))
+y = pickle.load(open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'rb'))
+print  " has been created: " + str(len(y))
