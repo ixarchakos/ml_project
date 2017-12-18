@@ -117,7 +117,7 @@ class Feature_Extraction:
         self.add_to_feature_matrix(feature_dict, year, 14)
         self.feature_names[14] = 'cast exact tenure'
 
-        feature_dict = self.nf.team_size(year,  'exact')[1]
+        feature_dict = self.nf.team_tenure(year,  'exact')[1]
         self.add_to_feature_matrix(feature_dict, year, 15)
         self.feature_names[15] = 'crew exact tenure'
 
@@ -125,7 +125,7 @@ class Feature_Extraction:
         self.add_to_feature_matrix(feature_dict, year, 16)
         self.feature_names[16] = 'cast tenure till'
 
-        feature_dict = self.nf.team_size(year, 'till')[1]
+        feature_dict = self.nf.team_tenure(year, 'till')[1]
         self.add_to_feature_matrix(feature_dict, year, 17)
         self.feature_names[17] = 'crew tenure till'
 
@@ -351,11 +351,23 @@ class Feature_Extraction:
             y.append(rounded)
         return np.array(y)
 
+    def create_target_vector_regression_rating(self):
+        y = []
+        for key in self.sorted_movies.keys():
+            y.append(self.movies[key]['rating'])
+        pickle.dump(np.array(y), open(project_folder + 'dicts/' + 'ratings' + '.p', 'wb'))
+        return np.array(y)
+
+    def create_feature_names(self):
+        pickle.dump(self.feature_names, open(project_folder + 'dicts/' + 'feature_names' + '.p', 'wb'))
+        return self.feature_names
 
 k = Feature_Extraction()
 #k.feature_extraction()
 #print len(k.create_target_vector())
-y = k.create_target_vector()
-pickle.dump(y, open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'wb'))
-y = pickle.load(open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'rb'))
-print  " has been created: " + str(len(y))
+# y = k.create_target_vector()
+# pickle.dump(y, open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'wb'))
+# y = pickle.load(open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'rb'))
+# print  " has been created: " + str(len(y))
+
+k.create_feature_names()

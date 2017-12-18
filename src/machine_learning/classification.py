@@ -7,12 +7,13 @@ from sklearn.cross_validation import train_test_split
 from sklearn.ensemble import RandomForestClassifier , GradientBoostingClassifier , ExtraTreesClassifier
 from sklearn.preprocessing import scale
 from xgboost.sklearn import XGBClassifier
-
+from sklearn.svm import LinearSVC
 project_folder = os.path.dirname(__file__).split("src")[0]
 
 
 class Classification:
 	def __init__(self):
+		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
 		X = pickle.load(open(project_folder+ 'dicts/third.p' , 'rb')).T
 		y = pickle.load(open(project_folder+ 'dicts/roundedratings.p' , 'rb'))
 		self.n = X.shape[0]
@@ -42,8 +43,8 @@ class Classification:
 		clf = RandomForestClassifier(n_estimators=500, criterion='gini', min_samples_split=2,
 							   min_samples_leaf=2, max_leaf_nodes=100, n_jobs=-1)
 		model = clf.fit(self.X, self.y)
-		self.calculate_accuracy('random forest', model)
-
+		#self.calculate_accuracy('random forest', model)
+		self.calculate_RMSE('random Forest' , model)
 
 	def sgd(self):
 		clf = SGDClassifier(alpha=.0001, n_iter=500, penalty="elasticnet", n_jobs=-1)
@@ -65,11 +66,25 @@ class Classification:
 		model = clf.fit(self.X, self.y)
 		self.calculate_accuracy('XGB' , model)
 
+	def linearSVM(self):
+		clf = LinearSVC()
+		model = clf.fit(self.X, self.y)
+		self.calculate_RMSE('SVM' , model)
+		self.calculate_accuracy('SVM' , model)
+
+
 	def calculate_accuracy(self , name , model):
 		train_pred = model.predict(self.X)
 		print(name +' train accuracy = {}'.format((train_pred == self.y).mean()))
 		test_pred = model.predict(self.testX)
 		print(name + ' test accuracy = {}'.format((test_pred == self.testy).mean()))
+
+	def calculate_RMSE(self, name , model):
+		train_pred = model.predict(self.X)
+		print(name + 'train RMSE = {}'.format(np.sqrt((train_pred - self.y) ** 2).mean()))
+		test_pred = model.predict(self.testX)
+		print(name + ' test RMSE = {}'.format(np.sqrt((test_pred - self.testy) ** 2).mean()))
+
 
 	def scale_sets(self,x_train, x_test):
 		x_train = scale(x_train) if x_train is not None else x_train
@@ -78,6 +93,9 @@ class Classification:
 
 
 
+
+
 c = Classification()
-c.logitic_regression()
-c.XGB()
+#c.logitic_regression()
+c.random_forest()
+c.linearSVM()
