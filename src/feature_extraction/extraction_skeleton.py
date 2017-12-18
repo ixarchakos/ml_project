@@ -4,7 +4,6 @@ from src.feature_extraction.graph_features.centrality import Centrality
 import operator
 import numpy as np
 import collections
-import math
 import os
 import pickle
 project_folder = os.path.dirname(__file__).split("src")[0]
@@ -41,10 +40,9 @@ class Feature_Extraction:
 
     def save_feature_matrix(self , name):
         fm = np.array(self.feature_matrix)
-        pickle.dump(fm, open(project_folder + 'dicts/' + name +'.p', 'wb'))
+        pickle.dump(fm, open(project_folder + 'dicts/' + name + '.p', 'wb'))
         fm = pickle.load(open(project_folder + 'dicts/' + name + '.p', 'rb'))
-        print fm
-        exit()
+        print name, " has been created: " + str(len(fm))
 
     def sort_by_year(self):
         temp = dict()
