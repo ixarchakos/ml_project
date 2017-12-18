@@ -247,36 +247,36 @@ class Feature_Extraction:
         self.feature_names[44] = 'previous till crew betweenness centrality'
 
     def very_very_complex_features_movies_per_year(self, year):
-        value = self.gf.small_world_coefficient(year , 'exact' , 'cast')[0]
+        value = self.gf.small_world_coefficient(year , 'exact' , 'actors')[0]
         self.add_to_feature_matrix_small_world(value, year , 45)
         self.feature_names[45] = 'Previous cast exact gcc'
 
-        value = self.gf.small_world_coefficient(year, 'exact', 'cast')[1]
+        value = self.gf.small_world_coefficient(year, 'exact', 'actors')[1]
         self.add_to_feature_matrix_small_world(value, year, 46)
         self.feature_names[46] = 'Previous cast exact gcc'
 
-        value = self.gf.small_world_coefficient(year, 'exact', 'cast')[2]
+        value = self.gf.small_world_coefficient(year, 'exact', 'actors')[2]
         self.add_to_feature_matrix_small_world(value, year, 47)
         self.feature_names[47] = 'Previous cast exact gcc'
 
-        value = self.gf.small_world_coefficient(year, 'exact', 'cast')[3]
+        value = self.gf.small_world_coefficient(year, 'exact', 'actors')[3]
         self.add_to_feature_matrix_small_world(value, year, 48)
         self.feature_names[48] = 'Previous cast exact gcc'
         #################################################################3
 
-        value = self.gf.small_world_coefficient(year, 'till', 'cast')[0]
+        value = self.gf.small_world_coefficient(year, 'till', 'actors')[0]
         self.add_to_feature_matrix_small_world(value, year, 49)
         self.feature_names[49] = 'Previous cast till gcc'
 
-        value = self.gf.small_world_coefficient(year, 'till', 'cast')[1]
+        value = self.gf.small_world_coefficient(year, 'till', 'actors')[1]
         self.add_to_feature_matrix_small_world(value, year, 50)
         self.feature_names[50] = 'Previous cast till gcc'
 
-        value = self.gf.small_world_coefficient(year, 'till', 'cast')[2]
+        value = self.gf.small_world_coefficient(year, 'till', 'actors')[2]
         self.add_to_feature_matrix_small_world(value, year, 51)
         self.feature_names[51] = 'Previous cast till gcc'
 
-        value = self.gf.small_world_coefficient(year, 'till', 'cast')[3]
+        value = self.gf.small_world_coefficient(year, 'till', 'actors')[3]
         self.add_to_feature_matrix_small_world(value, year, 52)
         self.feature_names[52] = 'Previous cast till gcc'
         ###############################################################
