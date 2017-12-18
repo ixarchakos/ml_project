@@ -6,7 +6,7 @@ import os
 import numpy as np
 
 
-class Centrality():
+class Centrality:
 
     def __init__(self):
         self.f = Feature()
@@ -56,8 +56,8 @@ class Centrality():
 
             if count > 0:
                 movie_centrality[mid] = sum_centrality / count
-        for key, value in sorted(movie_centrality.iteritems(), key=lambda (k, v): (v, k)):
-            print "%s: %s" % (movies[key]['name'], value)
+        # for key, value in sorted(movie_centrality.iteritems(), key=lambda (k, v): (v, k)):
+        #     print "%s: %s" % (movies[key]['name'], value)
         return movie_centrality
 
 
@@ -160,9 +160,9 @@ class Centrality():
         return pickle.load(open(fileName , 'rb'))
 
 
-
-
-
-c = Centrality()
-#c.avg_team_centrality(2014 , 'till' , centrality='degree' , cast_crew = 'actors')
-c.small_world_coefficient(1995, feature_type= 'exact' , cast_crew = 'actors')
+#
+#
+#
+# c = Centrality()
+# #c.avg_team_centrality(2014 , 'till' , centrality='degree' , cast_crew = 'actors')
+# c.small_world_coefficient(1995, feature_type= 'exact' , cast_crew = 'actors')
