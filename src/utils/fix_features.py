@@ -8,11 +8,12 @@ def fix_features():
 	first = load_dict('first')
 	second = load_dict('second')
 	third = load_dict('third')
-	#last = load_dict('last')
+	last = load_dict('last')
 
 	print first.shape
 	print second.shape
 	print third.shape
+	print last.shape
 
 	second_fixed = np.concatenate((first[0:37] , second[37:]))
 	print second_fixed.shape
@@ -21,9 +22,9 @@ def fix_features():
 	print third_fixed.shape
 	save_dict('third_fixed' , third_fixed )
 
-	# last_fixed = np.concatenate((first[0:37], last[37:]))
-	# print last_fixed.shape
-	#save_dict('last_fixed' , last_fixed )
+	last_fixed = np.concatenate((first[0:37], last[37:]))
+	print last_fixed.shape
+	save_dict('last_fixed' , last_fixed )
 
 
 def load_dict(name):
