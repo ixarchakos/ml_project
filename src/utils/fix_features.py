@@ -18,6 +18,7 @@ def fix_features():
 	second_fixed = np.concatenate((first[0:37] , second[37:]))
 	print second_fixed.shape
 	save_dict('second_fixed' , second_fixed )
+
 	third_fixed = np.concatenate((first[0:37] , third[37:]))
 	print third_fixed.shape
 	save_dict('third_fixed' , third_fixed )
