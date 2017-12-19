@@ -370,4 +370,4 @@ k = Feature_Extraction()
 # y = pickle.load(open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'rb'))
 # print  " has been created: " + str(len(y))
 
-k.create_feature_names()
+k.feature_extraction()
