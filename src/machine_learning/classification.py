@@ -16,6 +16,7 @@ project_folder = os.path.dirname(__file__).split("src")[0]
 
 
 class Classification:
+
 	def __init__(self, number_of_features=0):
 		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
 		X = pickle.load(open(project_folder+ 'dicts/third.p' , 'rb')).T
@@ -44,11 +45,12 @@ class Classification:
 		self.calculate_accuracy('Logistic', model)
 		self.calculate_RMSE("Logistic", model)
 
-	def random_forest(self):
 
-		model = RandomForestClassifier()
-		model.fit(self.X, self.y)
-		self.calculate_accuracy('random forest', model)
+	def random_forest(self):
+		clf = RandomForestClassifier(n_estimators=500, criterion='gini', min_samples_split=2,
+							   min_samples_leaf=2, max_leaf_nodes=100, n_jobs=-1)
+		model = clf.fit(self.X, self.y)
+		#self.calculate_accuracy('random forest', model)
 		self.calculate_RMSE('random Forest' , model)
 
 	def sgd(self):
@@ -67,10 +69,9 @@ class Classification:
 		self.calculate_accuracy('Xtra tree' , model)
 
 	def XGB(self):
-		model = XGBClassifier()
-		model.fit(self.X, self.y)
-		self.calculate_accuracy('XGB', model)
-		self.calculate_RMSE('XGB', model)
+		clf = XGBClassifier()
+		model = clf.fit(self.X, self.y)
+		self.calculate_accuracy('XGB' , model)
 
 	def linearSVM(self):
 		clf = LinearSVC()
@@ -79,7 +80,8 @@ class Classification:
 		self.calculate_accuracy('SVM', model)
 
 	def calculate_f1(self, name, model):
-
+		self.calculate_RMSE('SVM' , model)
+		self.calculate_accuracy('SVM' , model)
 
 	def calculate_accuracy(self , name , model):
 		train_pred = model.predict(self.X)
@@ -156,3 +158,9 @@ for features in [20]:
 	c = Classification(features)
 	c.grid_search(["all"])
 	print "-" * 50
+
+
+c = Classification()
+#c.logitic_regression()
+c.random_forest()
+c.linearSVM()
