@@ -14,7 +14,7 @@ project_folder = os.path.dirname(__file__).split("src")[0]
 class Classification:
 	def __init__(self):
 		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
-		X = pickle.load(open(project_folder+ 'dicts/third.p' , 'rb')).T
+		X = pickle.load(open(project_folder+ 'dicts/last_fixed.p' , 'rb')).T
 		y = pickle.load(open(project_folder+ 'dicts/roundedratings.p' , 'rb'))
 		self.n = X.shape[0]
 		self.d = X.shape[1]
