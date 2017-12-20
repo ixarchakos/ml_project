@@ -1,13 +1,10 @@
 import numpy as np
-import collections
 import os
 import pickle
 from sklearn.cross_validation import train_test_split
-from sklearn.linear_model import LinearRegression
 from xgboost import XGBRegressor
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.linear_model import Lasso
-from random import randint
 
 project_folder = os.path.dirname(__file__).split("src")[0]
 
@@ -35,7 +32,7 @@ class Regression:
 		colsample_bytree=1, max_depth=7)
 
 		model = clf.fit(self.X , self.y)
-		self.calculate_RMSE('XGB' , model)
+		self.calculate_RMSE('XGB', model)
 
 	def kernelridge(self):
 		clf = KernelRidge(alpha = 1 , kernel='rbf' , degree = 1)
@@ -51,6 +48,7 @@ class Regression:
 		train_pred = model.predict(self.X)
 		print(name + ' train RMSE = {}'.format(np.sqrt((train_pred - self.y) ** 2).mean()))
 		test_pred = model.predict(self.testX)
+		print(name + ' test RMSE = {}'.format(np.sqrt((test_pred - self.testy) ** 2).mean()))
 
 	def random(self):
 		train_pred = 2 + np.random.uniform(0,1,len(self.y)) * 8
@@ -67,11 +65,3 @@ class Regression:
 			print i
 			self.lasso()
 			print '-------------------'
-
-r = Regression()
-r.different_test_training_sets()
-exit()
-
-r.random()
-r.xgboost()
-r.kernelridge()

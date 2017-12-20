@@ -351,7 +351,7 @@ class Feature_Extraction:
                 y.append(0)
             elif 7 >= self.movies[key]["rating"] >= 5.1:
                 y.append(1)
-            elif q >= self.movies[key]["rating"] >= 7.1:
+            elif 15 >= self.movies[key]["rating"] >= 7.1:
                 y.append(2)
         return np.array(y)
 
@@ -372,15 +372,3 @@ class Feature_Extraction:
     def create_feature_names(self):
         pickle.dump(self.feature_names, open(project_folder + 'dicts/' + 'feature_names' + '.p', 'wb'))
         return self.feature_names
-
-
-k = Feature_Extraction()
-#k.feature_extraction()
-print len(k.create_target_vector())
-y = k.create_target_vector_3_class()
-pickle.dump(y, open(project_folder + 'dicts/' + '5classes' + '.p', 'wb'))
-
-# y = pickle.load(open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'rb'))
-# print  " has been created: " + str(len(y))
-
-#k.feature_extraction()

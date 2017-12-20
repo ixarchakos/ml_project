@@ -22,10 +22,9 @@ class Classification:
 
 	def __init__(self, number_of_features=0):
 		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
-		X = pickle.load(open(project_folder+ 'dicts/last_fixed.p' , 'rb')).T
-
-		y = pickle.load(open(project_folder+ 'dicts/5classes.p' , 'rb'))
-		# y = pickle.load(open(project_folder+ 'dicts/roundedratings.p' , 'rb'))
+		X = pickle.load(open(project_folder+ 'dicts/last_fixed.p', 'rb')).T
+		# y = pickle.load(open(project_folder+ 'dicts/5classes.p', 'rb'))
+		y = pickle.load(open(project_folder+ 'dicts/roundedratings.p' , 'rb'))
 		self.n = X.shape[0]
 		self.d = X.shape[1]
 		print 'Feature matrix X with shape:' , X.shape , 'is loaded'
@@ -147,19 +146,19 @@ class Classification:
 			if algorithm_list[0] == "all":
 				self.grid_search(["lr", "svc", "rfc", "mlp", "mnb", "xgb"])
 			if algorithm == "lr":
-				model = GridSearchCV(LogisticRegression(), lr_params, n_jobs=-1, cv=10).fit(self.X, self.y)
+				model = GridSearchCV(LogisticRegression(), lr_params, n_jobs=-1, cv=5).fit(self.X, self.y)
 				self.print_results(model, "LogisticRegression")
 			elif algorithm == "svc":
-				model = GridSearchCV(LinearSVC(), lsvc_params, n_jobs=-1, cv=10).fit(self.X, self.y)
+				model = GridSearchCV(LinearSVC(), lsvc_params, n_jobs=-1, cv=5).fit(self.X, self.y)
 				self.print_results(model, "SVC")
 			elif algorithm == "rfc":
-				model = GridSearchCV(RandomForestClassifier(), rfc_params, n_jobs=-1, cv=10).fit(self.X, self.y)
+				model = GridSearchCV(RandomForestClassifier(), rfc_params, n_jobs=-1, cv=5).fit(self.X, self.y)
 				self.print_results(model, "RandomForests")
 			elif algorithm == "mlp":
-				model = GridSearchCV(MLPClassifier(), mlp_params, n_jobs=-1, cv=10).fit(self.X, self.y)
+				model = GridSearchCV(MLPClassifier(), mlp_params, n_jobs=-1, cv=5).fit(self.X, self.y)
 				self.print_results(model, "MLP")
 			elif algorithm == "mnb":
-				model = GridSearchCV(MultinomialNB(), mnb_params, n_jobs=-1, cv=10).fit(self.X, self.y)
+				model = GridSearchCV(MultinomialNB(), mnb_params, n_jobs=-1, cv=5).fit(self.X, self.y)
 				self.print_results(model, "MultinomialNB")
 			elif algorithm == "xgb":
 				model = GridSearchCV(XGBClassifier(), {}, n_jobs=-1, cv=2, verbose=True).fit(self.X, self.y)
@@ -172,16 +171,3 @@ class Classification:
 		self.calculate_precision_recall_f1(msg, model)
 
 
-# Grid search with all the features and PCA with 15, 25, 30, 40 principal components
-# for features in [35]:
-# 	print
-# 	print "Features " + str(features)
-# 	print "-"*50
-# 	c = Classification(features)
-# 	c.grid_search(["all"])
-# 	print "-" * 50
-
-
-c = Classification()
-c.confusion_matrix()
-exit()
