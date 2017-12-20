@@ -99,3 +99,8 @@ c = Classification()
 #c.logitic_regression()
 c.random_forest()
 c.linearSVM()
+
+
+
+
+

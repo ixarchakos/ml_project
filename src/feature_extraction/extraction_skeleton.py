@@ -358,6 +358,14 @@ class Feature_Extraction:
         pickle.dump(np.array(y), open(project_folder + 'dicts/' + 'ratings' + '.p', 'wb'))
         return np.array(y)
 
+    def create_target_vector_regression_revenue(self):
+        y = []
+        for key in self.sorted_movies.keys():
+            y.append(self.movies[key]['revenue'])
+        pickle.dump(np.array(y), open(project_folder + 'dicts/' + 'revenues' + '.p', 'wb'))
+        return np.array(y)
+
+
     def create_feature_names(self):
         pickle.dump(self.feature_names, open(project_folder + 'dicts/' + 'feature_names' + '.p', 'wb'))
         return self.feature_names
@@ -370,4 +378,4 @@ k = Feature_Extraction()
 # y = pickle.load(open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'rb'))
 # print  " has been created: " + str(len(y))
 
-k.create_feature_names()
+k.create_target_vector_regression_revenue()

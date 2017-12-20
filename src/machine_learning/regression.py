@@ -13,10 +13,13 @@ project_folder = os.path.dirname(__file__).split("src")[0]
 
 
 class Regression:
-	def __init__(self):
+	def __init__(self , value= 'rating'):
 		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
 		X = pickle.load(open(project_folder+ 'dicts/third.p' , 'rb')).T
-		y = pickle.load(open(project_folder+ 'dicts/ratings.p' , 'rb'))
+		if value == 'rating':
+			y = pickle.load(open(project_folder+ 'dicts/ratings.p' , 'rb'))
+		else:
+			y = pickle.load(open(project_folder+ 'dicts/revenues.p' , 'rb'))
 		self.n = X.shape[0]
 		self.d = X.shape[1]
 		print 'Feature matrix X with shape:' , X.shape , 'is loaded'
@@ -56,4 +59,6 @@ class Regression:
 
 r = Regression()
 r.xgboost()
-r.kernelridge()
+#r.kernelridge()
+
+
