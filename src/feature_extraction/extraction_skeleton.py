@@ -344,6 +344,17 @@ class Feature_Extraction:
 
         #print len(self.feature_matrix[0])
 
+    def create_target_vector_3_class(self):
+        y = []
+        for key in self.sorted_movies.keys():
+            if 5 >= self.movies[key]["rating"] >= 0:
+                y.append(0)
+            elif 7 >= self.movies[key]["rating"] >= 5.1:
+                y.append(1)
+            elif 15 >= self.movies[key]["rating"] >= 7.1:
+                y.append(2)
+        return np.array(y)
+
     def create_target_vector(self):
         y = []
         for key in self.sorted_movies.keys():
@@ -370,12 +381,18 @@ class Feature_Extraction:
         pickle.dump(self.feature_names, open(project_folder + 'dicts/' + 'feature_names' + '.p', 'wb'))
         return self.feature_names
 
+
 k = Feature_Extraction()
 #k.feature_extraction()
-#print len(k.create_target_vector())
-# y = k.create_target_vector()
-# pickle.dump(y, open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'wb'))
+print len(k.create_target_vector())
+y = k.create_target_vector_3_class()
+pickle.dump(y, open(project_folder + 'dicts/' + '5classes' + '.p', 'wb'))
+
 # y = pickle.load(open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'rb'))
 # print  " has been created: " + str(len(y))
 
+
 k.create_target_vector_regression_revenue()
+
+#k.feature_extraction()
+
