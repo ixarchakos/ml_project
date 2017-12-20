@@ -2,7 +2,7 @@ import numpy as np
 import collections
 import os
 import pickle
-
+import matplotlib.pyplot as plt
 
 project_folder = os.path.dirname(__file__).split("src")[0]
 
@@ -19,6 +19,7 @@ class Correlation:
 		print '********************************************************'
 
 	def pearson(self):
+		fm = np.zeros(61 * 61).reshape(61,61)
 		for feature in range(self.X.shape[1]):
 			print "-" * 30
 			print str(feature)
@@ -28,6 +29,12 @@ class Correlation:
 					if abs(np.corrcoef(self.X[:, feature], self.X[:, inner_feature])[0, 1]) > 0.6:
 						print inner_feature, np.corrcoef(self.X[:, feature],
 							self.X[:, inner_feature])[0, 1], str(inner_feature)
+						fm[inner_feature][feature] = abs(np.corrcoef(self.X[:, feature],
+							self.X[:, inner_feature])[0, 1])
+
+		plt.imshow(fm , cmap='YlGn')
+		plt.colorbar()
+		plt.show()
 
 
 c = Correlation()

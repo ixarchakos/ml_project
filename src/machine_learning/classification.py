@@ -1,5 +1,5 @@
 import numpy as np
-import collections
+from collections import Counter
 import os
 import pickle
 from sklearn.linear_model import LogisticRegression , SGDClassifier
@@ -8,6 +8,9 @@ from sklearn.ensemble import RandomForestClassifier , GradientBoostingClassifier
 from sklearn.preprocessing import scale
 from xgboost.sklearn import XGBClassifier
 from sklearn.svm import LinearSVC
+
+import matplotlib.pyplot as plt
+
 project_folder = os.path.dirname(__file__).split("src")[0]
 
 
@@ -31,20 +34,19 @@ class Classification:
 
 	def logitic_regression(self):
 		#self.X , self.testX = self.scale_sets(self.X, self.testX)
-		clf = LogisticRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1,
-						   random_state=None, solver='liblinear', max_iter=1000, multi_class='ovr',
-						   warm_start=False, n_jobs=-1)
+		clf = LogisticRegression(penalty='l1', tol=1e-05)
 		model = clf.fit(self.X, self.y)
 
 		self.calculate_accuracy('Logistic', model)
+		return model
 
 
 	def random_forest(self):
-		clf = RandomForestClassifier(n_estimators=500, criterion='gini', min_samples_split=2,
-							   min_samples_leaf=2, max_leaf_nodes=100, n_jobs=-1)
+		clf = RandomForestClassifier(n_estimators=300, criterion='entropy', min_samples_split=0.1 , )
 		model = clf.fit(self.X, self.y)
 		#self.calculate_accuracy('random forest', model)
 		self.calculate_RMSE('random Forest' , model)
+		return model
 
 	def sgd(self):
 		clf = SGDClassifier(alpha=.0001, n_iter=500, penalty="elasticnet", n_jobs=-1)
@@ -93,9 +95,21 @@ class Classification:
 
 
 
-
+	def confusion_matrix(self ):
+		rf = self.random_forest()
+		rf_pred = rf.predict(self.testX)
+		print Counter(rf_pred)
+		print Counter(self.testy)
+		cf = np.zeros(100).reshape(10,10)
+		for i, p in enumerate(rf_pred):
+			cf[p][self.testy[i]] += 1
+		plt.imshow(cf )
+		plt.colorbar()
+		plt.show()
 
 c = Classification()
+c.confusion_matrix()
+exit()
 #c.logitic_regression()
 c.random_forest()
 c.linearSVM()
