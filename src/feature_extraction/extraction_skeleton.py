@@ -351,7 +351,7 @@ class Feature_Extraction:
                 y.append(0)
             elif 7 >= self.movies[key]["rating"] >= 5.1:
                 y.append(1)
-            elif q >= self.movies[key]["rating"] >= 7.1:
+            elif 15 >= self.movies[key]["rating"] >= 7.1:
                 y.append(2)
         return np.array(y)
 

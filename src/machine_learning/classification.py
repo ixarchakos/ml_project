@@ -24,8 +24,8 @@ class Classification:
 		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
 		X = pickle.load(open(project_folder+ 'dicts/last_fixed.p' , 'rb')).T
 
-		y = pickle.load(open(project_folder+ 'dicts/5classes.p' , 'rb'))
-		# y = pickle.load(open(project_folder+ 'dicts/roundedratings.p' , 'rb'))
+		#y = pickle.load(open(project_folder+ 'dicts/5classes.p' , 'rb'))
+		y = pickle.load(open(project_folder+ 'dicts/roundedratings.p' , 'rb'))
 		self.n = X.shape[0]
 		self.d = X.shape[1]
 		print 'Feature matrix X with shape:' , X.shape , 'is loaded'
@@ -111,11 +111,12 @@ class Classification:
 		rf_pred = rf.predict(self.testX)
 		print Counter(rf_pred)
 		print Counter(self.testy)
-		cf = np.zeros(9).reshape(3,3)
+		cf = np.zeros(100).reshape(10,10)
 		for i, p in enumerate(rf_pred):
 			cf[p][self.testy[i]] += 1
 		plt.imshow(cf )
 		plt.colorbar()
+		plt.savefig(project_folder + 'plots/experiment_confusion2'+ '.png')
 		plt.show()
 
 	def scale_sets(self,x_train, x_test):
