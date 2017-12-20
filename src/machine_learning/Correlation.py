@@ -34,7 +34,7 @@ class Correlation:
 
 		plt.imshow(fm , cmap='YlGn')
 		plt.colorbar()
-		plt.show()
+		plt.savefig(project_folder + 'plots/correlation.jpg')
 
 
 c = Correlation()

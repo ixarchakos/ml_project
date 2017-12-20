@@ -10,10 +10,15 @@ project_folder = os.path.dirname(__file__).split("src")[0]
 
 
 class Regression:
-	def __init__(self):
+	def __init__(self , value= 'rating'):
 		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
-		X = pickle.load(open(project_folder+ 'dicts/third_fixed.p' , 'rb')).T
+		if value == 'rating':
+			y = pickle.load(open(project_folder+ 'dicts/ratings.p' , 'rb'))
+		else:
+			y = pickle.load(open(project_folder+ 'dicts/revenues.p' , 'rb'))
+		X = pickle.load(open(project_folder+ 'dicts/last_fixed.p' , 'rb')).T
 		y = pickle.load(open(project_folder+ 'dicts/ratings.p' , 'rb'))
+
 		self.n = X.shape[0]
 		self.d = X.shape[1]
 		print 'Feature matrix X with shape:' , X.shape , 'is loaded'
@@ -56,7 +61,6 @@ class Regression:
 		test_pred = 2 + np.random.uniform(0,1,len(self.testy))  * 8
 		print('random' + ' test RMSE = {}'.format(np.sqrt((test_pred - self.testy) ** 2).mean()))
 
-
 	def different_test_training_sets(self):
 		X = pickle.load(open(project_folder + 'dicts/third_fixed.p', 'rb')).T
 		y = pickle.load(open(project_folder+ 'dicts/ratings.p' , 'rb'))
@@ -64,4 +68,3 @@ class Regression:
 			self.X, self.testX, self.y, self.testy = self.create_data_sets(X, y , test_size=i)
 			print i
 			self.lasso()
-			print '-------------------'

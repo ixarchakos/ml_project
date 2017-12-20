@@ -110,11 +110,12 @@ class Classification:
 		rf_pred = rf.predict(self.testX)
 		print Counter(rf_pred)
 		print Counter(self.testy)
-		cf = np.zeros(9).reshape(3,3)
+		cf = np.zeros(100).reshape(10,10)
 		for i, p in enumerate(rf_pred):
 			cf[p][self.testy[i]] += 1
 		plt.imshow(cf )
 		plt.colorbar()
+		plt.savefig(project_folder + 'plots/experiment_confusion2'+ '.png')
 		plt.show()
 
 	def scale_sets(self,x_train, x_test):
@@ -169,5 +170,4 @@ class Classification:
 		self.calculate_accuracy(msg, model)
 		self.calculate_RMSE(msg, model)
 		self.calculate_precision_recall_f1(msg, model)
-
 
