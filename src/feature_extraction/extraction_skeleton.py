@@ -348,11 +348,11 @@ class Feature_Extraction:
         y = []
         for key in self.sorted_movies.keys():
             if 5 >= self.movies[key]["rating"] >= 0:
-                y.append(1)
+                y.append(0)
             elif 7 >= self.movies[key]["rating"] >= 5.1:
+                y.append(1)
+            elif q >= self.movies[key]["rating"] >= 7.1:
                 y.append(2)
-            elif 15 >= self.movies[key]["rating"] >= 7.1:
-                y.append(3)
         return np.array(y)
 
     def create_target_vector(self):

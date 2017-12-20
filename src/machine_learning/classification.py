@@ -1,4 +1,5 @@
 import numpy as np
+from collections import Counter
 import os
 import pickle
 from sklearn.linear_model import LogisticRegression , SGDClassifier
@@ -12,6 +13,8 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import precision_score, recall_score, f1_score
 from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
 project_folder = os.path.dirname(__file__).split("src")[0]
 
 
@@ -20,7 +23,9 @@ class Classification:
 	def __init__(self, number_of_features=0):
 		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
 		X = pickle.load(open(project_folder+ 'dicts/last_fixed.p' , 'rb')).T
+
 		y = pickle.load(open(project_folder+ 'dicts/5classes.p' , 'rb'))
+		# y = pickle.load(open(project_folder+ 'dicts/roundedratings.p' , 'rb'))
 		self.n = X.shape[0]
 		self.d = X.shape[1]
 		print 'Feature matrix X with shape:' , X.shape , 'is loaded'
@@ -40,18 +45,18 @@ class Classification:
 
 	def logitic_regression(self):
 		#self.X , self.testX = self.scale_sets(self.X, self.testX)
-		clf = LogisticRegression(n_jobs=-1)
+		clf = LogisticRegression(penalty='l1', tol=1e-05)
 		model = clf.fit(self.X, self.y)
 		self.calculate_accuracy('Logistic', model)
 		self.calculate_RMSE("Logistic", model)
-
+		return model
 
 	def random_forest(self):
-		clf = RandomForestClassifier(n_estimators=500, criterion='gini', min_samples_split=2,
-							   min_samples_leaf=2, max_leaf_nodes=100, n_jobs=-1)
+		clf = RandomForestClassifier(n_estimators=300, criterion='entropy', min_samples_split=0.1 , )
 		model = clf.fit(self.X, self.y)
 		#self.calculate_accuracy('random forest', model)
 		self.calculate_RMSE('random Forest' , model)
+		return model
 
 	def sgd(self):
 		clf = SGDClassifier(alpha=.0001, n_iter=500, penalty="elasticnet", n_jobs=-1)
@@ -100,6 +105,18 @@ class Classification:
 		print(name + ' train RMSE = {}'.format(np.sqrt((train_pred - self.y) ** 2).mean()))
 		test_pred = model.predict(self.testX)
 		print(name + ' test RMSE = {}'.format(np.sqrt((test_pred - self.testy) ** 2).mean()))
+
+	def confusion_matrix(self ):
+		rf = self.random_forest()
+		rf_pred = rf.predict(self.testX)
+		print Counter(rf_pred)
+		print Counter(self.testy)
+		cf = np.zeros(9).reshape(3,3)
+		for i, p in enumerate(rf_pred):
+			cf[p][self.testy[i]] += 1
+		plt.imshow(cf )
+		plt.colorbar()
+		plt.show()
 
 	def scale_sets(self,x_train, x_test):
 		x_train = scale(x_train) if x_train is not None else x_train
@@ -156,11 +173,15 @@ class Classification:
 
 
 # Grid search with all the features and PCA with 15, 25, 30, 40 principal components
-for features in [35]:
-	print
-	print "Features " + str(features)
-	print "-"*50
-	c = Classification(features)
-	c.grid_search(["all"])
-	print "-" * 50
+# for features in [35]:
+# 	print
+# 	print "Features " + str(features)
+# 	print "-"*50
+# 	c = Classification(features)
+# 	c.grid_search(["all"])
+# 	print "-" * 50
 
+
+c = Classification()
+c.confusion_matrix()
+exit()
