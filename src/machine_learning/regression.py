@@ -53,7 +53,11 @@ class Regression:
 		test_pred = model.predict(self.testX)
 		print(name + ' test RMSE = {}'.format(np.sqrt((test_pred - self.testy) ** 2).mean()))
 
+	def grid_search(self, algorithm_list):
+		ridge_params = 0
+
 
 r = Regression()
-r.xgboost()
+r.lasso()
+exit()
 r.kernelridge()

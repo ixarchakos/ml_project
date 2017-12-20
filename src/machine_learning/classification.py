@@ -19,8 +19,8 @@ class Classification:
 
 	def __init__(self, number_of_features=0):
 		self.feature_names = pickle.load(open(project_folder+ 'dicts/feature_names.p' , 'rb'))
-		X = pickle.load(open(project_folder+ 'dicts/third.p' , 'rb')).T
-		y = pickle.load(open(project_folder+ 'dicts/roundedratings.p' , 'rb'))
+		X = pickle.load(open(project_folder+ 'dicts/last_fixed.p' , 'rb')).T
+		y = pickle.load(open(project_folder+ 'dicts/5classes.p' , 'rb'))
 		self.n = X.shape[0]
 		self.d = X.shape[1]
 		print 'Feature matrix X with shape:' , X.shape , 'is loaded'
@@ -79,9 +79,15 @@ class Classification:
 		self.calculate_RMSE('SVM', model)
 		self.calculate_accuracy('SVM', model)
 
-	def calculate_f1(self, name, model):
-		self.calculate_RMSE('SVM' , model)
-		self.calculate_accuracy('SVM' , model)
+	def calculate_precision_recall_f1(self, name, model):
+		train_pred = model.predict(self.X)
+		test_pred = model.predict(self.testX)
+		print name + " train recall: ", recall_score(self.y, train_pred, average='macro')
+		print name + " test recall: ", recall_score(self.testy, test_pred, average='macro')
+		print name + " train precision: ", precision_score(self.y, train_pred, average='macro')
+		print name + " test precision: ", precision_score(self.testy, test_pred, average='macro')
+		print name + " train f1: ", f1_score(self.y, train_pred, average='macro')
+		print name + " test f1: ", f1_score(self.testy, test_pred, average='macro')
 
 	def calculate_accuracy(self , name , model):
 		train_pred = model.predict(self.X)
@@ -91,7 +97,7 @@ class Classification:
 
 	def calculate_RMSE(self, name , model):
 		train_pred = model.predict(self.X)
-		print(name + 'train RMSE = {}'.format(np.sqrt((train_pred - self.y) ** 2).mean()))
+		print(name + ' train RMSE = {}'.format(np.sqrt((train_pred - self.y) ** 2).mean()))
 		test_pred = model.predict(self.testX)
 		print(name + ' test RMSE = {}'.format(np.sqrt((test_pred - self.testy) ** 2).mean()))
 
@@ -105,7 +111,6 @@ class Classification:
 			(n_components=components).fit_transform(test)
 
 	def grid_search(self, algorithm_list):
-		# XGBoost parameters
 		# Random Forest parameters
 		rfc_params = [{"criterion": ["gini", "entropy"], "min_samples_split": [i / 10.0 for i in range(1, 11)],
 		"n_estimators": [i for i in range(200, 601, 100)]}]
@@ -147,11 +152,11 @@ class Classification:
 		print(msg + " best parameters: " + str(model.best_params_))
 		self.calculate_accuracy(msg, model)
 		self.calculate_RMSE(msg, model)
-		self.calculate_f1(msg, model)
+		self.calculate_precision_recall_f1(msg, model)
 
 
 # Grid search with all the features and PCA with 15, 25, 30, 40 principal components
-for features in [20]:
+for features in [35]:
 	print
 	print "Features " + str(features)
 	print "-"*50
@@ -159,8 +164,3 @@ for features in [20]:
 	c.grid_search(["all"])
 	print "-" * 50
 
-
-c = Classification()
-#c.logitic_regression()
-c.random_forest()
-c.linearSVM()
