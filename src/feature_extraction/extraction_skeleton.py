@@ -377,7 +377,7 @@ class Feature_Extraction:
 k = Feature_Extraction()
 #k.feature_extraction()
 print len(k.create_target_vector())
-y = k.create_target_vector_5_class()
+y = k.create_target_vector_3_class()
 pickle.dump(y, open(project_folder + 'dicts/' + '5classes' + '.p', 'wb'))
 
 # y = pickle.load(open(project_folder + 'dicts/' + 'roundedratings' + '.p', 'rb'))
